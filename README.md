@@ -33,18 +33,6 @@ Abrí [http://localhost:3000](http://localhost:3000) en el navegador.
 
 ---
 
-## 🔑 Variables de entorno
-
-Crear un archivo `.env.local` en la raíz:
-
-```env
-RESEND_API_KEY=tu_api_key
-```
-
-> Obtené tu API key en [resend.com](https://resend.com)
-
----
-
 ## 📁 Estructura
 
 ```
