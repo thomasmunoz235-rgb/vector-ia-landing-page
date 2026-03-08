@@ -23,10 +23,6 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Vector — Desarrollo Web & Inteligencia Artificial",
   description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
-  icons: {
-    icon: "/images/Vector-Ia-trasparente.png",
-    apple: "/images/Vector-Ia-trasparente.png",
-  },
 };
 
 export default function RootLayout({
