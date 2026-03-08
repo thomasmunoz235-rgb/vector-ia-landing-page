@@ -1,33 +1,63 @@
-# Vector IA — Landing Page
+# Vector IA ⚡
 
-Sitio web de [Vector IA](https://vector-ia.com.ar), agencia de desarrollo web e integraciones de inteligencia artificial con base en Buenos Aires.
+> Desarrollo web e integraciones de IA para empresas que quieren resultados reales.
 
-## Stack
+**Buenos Aires, Argentina** · [vector-ia.com.ar](https://vector-ia.com.ar)
 
-- **Framework:** Next.js 15 (App Router)
-- **Lenguaje:** TypeScript
-- **Estilos:** Tailwind CSS
-- **Componentes:** shadcn/ui
-- **Animaciones:** Framer Motion
-- **Email:** Resend
+---
 
-## Desarrollo local
+## 🛠 Stack
+
+| Tecnología | Uso |
+|------------|-----|
+| Next.js 15 | Framework (App Router) |
+| TypeScript | Lenguaje |
+| Tailwind CSS | Estilos |
+| shadcn/ui | Componentes |
+| Framer Motion | Animaciones |
+| Resend | Envío de emails |
+
+---
+
+## 🚀 Desarrollo local
 
 ```bash
+# Instalar dependencias
 npm install
+
+# Iniciar servidor de desarrollo
 npm run dev
 ```
 
 Abrí [http://localhost:3000](http://localhost:3000) en el navegador.
 
-## Variables de entorno
+---
 
-Crear un archivo `.env.local` en la raíz del proyecto:
+## 🔑 Variables de entorno
 
-```
+Crear un archivo `.env.local` en la raíz:
+
+```env
 RESEND_API_KEY=tu_api_key
 ```
 
-## Contacto
+> Obtené tu API key en [resend.com](https://resend.com)
+
+---
+
+## 📁 Estructura
+
+```
+├── app/
+│   ├── api/contact/    # Endpoint de contacto
+│   ├── page.tsx        # Landing page
+│   └── layout.tsx      # Layout global
+├── components/ui/      # Componentes shadcn
+└── public/images/      # Assets estáticos
+```
+
+---
+
+## 📬 Contacto
 
 [team@vector-ia.com.ar](mailto:team@vector-ia.com.ar)
