@@ -78,7 +78,7 @@ const BG_DARK = "#0c1a30";  // dark contrast block
 export default function HomePage() {
   const [formState, setFormState] = useState<"idle" | "loading" | "sent" | "error">("idle");
 
-  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleContactSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormState("loading");
     const form = e.currentTarget;
@@ -110,7 +110,7 @@ export default function HomePage() {
               style={{ width: 160, height: 44 }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={LOGO_URL} alt="Vector" className="w-full h-full object-contain" />
+              <img src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" className="w-full h-full object-contain" />
             </div>
           </Link>
 
@@ -697,7 +697,7 @@ export default function HomePage() {
               style={{ width: 120, height: 36 }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={LOGO_URL} alt="Vector" className="w-full h-full object-contain" />
+              <img src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" className="w-full h-full object-contain" />
             </div>
           </Link>
           <div className="flex items-center gap-5">

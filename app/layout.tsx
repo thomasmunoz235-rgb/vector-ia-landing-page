@@ -23,6 +23,47 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Vector — Desarrollo Web & Inteligencia Artificial",
   description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+  metadataBase: new URL("https://vector-ia.com.ar"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Vector — Desarrollo Web & Inteligencia Artificial",
+    description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+    url: "https://vector-ia.com.ar",
+    siteName: "Vector IA",
+    locale: "es_AR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vector — Desarrollo Web & Inteligencia Artificial",
+    description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Vector IA",
+  url: "https://vector-ia.com.ar",
+  logo: "https://vector-ia.com.ar/images/Vector-Ia-trasparente.png",
+  description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Buenos Aires",
+    addressCountry: "AR",
+  },
+  email: "team@vector-ia.com.ar",
+  areaServed: "AR",
+  serviceType: [
+    "Desarrollo Web",
+    "Integraciones de Inteligencia Artificial",
+    "Automatización de Procesos",
+    "Consultoría IA",
+    "Sistemas RAG",
+  ],
+  sameAs: [],
 };
 
 export default function RootLayout({
@@ -32,6 +73,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${bricolage.variable} ${ibmMono.variable} ${dmSans.variable} antialiased bg-white text-[#0c1a30]`}>
         {children}
       </body>
