@@ -8,13 +8,13 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
 };
 
 const stagger: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.05 } },
 };
 
 const LOGO_URL = "/images/Vector-Ia-trasparente.png";
@@ -586,11 +586,32 @@ export default function HomePage() {
           </motion.p>
 
           {formState === "sent" ? (
-            <motion.div variants={fadeUp} className="flex items-center gap-3 py-6">
-              <CheckCircle className="w-5 h-5" style={{ color: BLUE_L }} />
-              <p className="text-[15px] font-medium text-white">
-                Mensaje enviado. Te respondemos en menos de 24hs.
-              </p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col gap-4 w-full max-w-md py-10 px-8 rounded-[4px]"
+              style={{ background: "rgba(255,255,255,0.05)", border: `1px solid ${BLUE_L}30` }}
+            >
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.15, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: `${BLUE_L}20`, border: `1px solid ${BLUE_L}40` }}
+              >
+                <CheckCircle className="w-6 h-6" style={{ color: BLUE_L }} />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.3 }}
+              >
+                <p className="text-[17px] font-semibold text-white mb-1">¡Mensaje enviado!</p>
+                <p className="text-[13px]" style={{ color: "#93b5e870" }}>
+                  Te respondemos en menos de 24 horas.
+                </p>
+              </motion.div>
             </motion.div>
           ) : (
             <motion.form
