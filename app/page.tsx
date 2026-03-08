@@ -1,54 +1,52 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { Globe, Layers, Database, Zap, Users } from "lucide-react";
+import { useState } from "react";
+import { Globe, Layers, Database, Zap, Users, Menu, ArrowUpRight, MoveRight, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } },
 };
 
 const stagger: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.08 } },
 };
 
-const LOGO_URL =
-  "https://drive.usercontent.google.com/download?id=1DtUXEbu8zjp5VziwleoBJd9nBINsWB53&export=view&authuser=0";
+const LOGO_URL = "/images/Vector-Ia-trasparente.png";
 
 const services = [
   {
     num: "01",
     icon: Globe,
     title: "Desarrollo Web",
-    desc: "Aplicaciones modernas construidas con Next.js, React y TypeScript. Rápidas, escalables y listas para producción desde el día uno.",
+    desc: "Aplicaciones modernas con Next.js, React y TypeScript. Rápidas, escalables y listas para producción desde el día uno.",
     tag: "Next.js · React · TypeScript",
-    span: "col-span-12 md:col-span-7",
   },
   {
     num: "02",
     icon: Layers,
     title: "Integraciones IA",
-    desc: "Conectamos modelos de lenguaje a tus sistemas existentes. Automatizaciones, chatbots y asistentes que trabajan con tu data.",
+    desc: "Conectamos modelos de lenguaje a tus sistemas existentes. Chatbots, asistentes y automatizaciones que trabajan con tu data.",
     tag: "OpenAI · APIs · Agentes",
-    span: "col-span-12 md:col-span-5",
   },
   {
     num: "03",
     icon: Database,
-    title: "RAG & Bases de conocimiento",
-    desc: "Sistemas RAG que permiten a los modelos consultar tus documentos y bases de datos internas con precisión.",
+    title: "RAG & Conocimiento",
+    desc: "Sistemas que permiten a los modelos consultar documentos y bases de datos internas con precisión real.",
     tag: "pgvector · LlamaIndex · FastAPI",
-    span: "col-span-12 md:col-span-4",
   },
   {
     num: "04",
     icon: Zap,
-    title: "Automatización de procesos",
+    title: "Automatización",
     desc: "Reducimos trabajo manual conectando herramientas, APIs y modelos de IA en flujos automatizados.",
     tag: "Workflows · APIs · Agentes",
-    span: "col-span-12 md:col-span-4",
   },
   {
     num: "05",
@@ -56,221 +54,651 @@ const services = [
     title: "Consultoría IA",
     desc: "Evaluamos tu negocio e identificamos dónde la IA puede generar mayor impacto en el menor tiempo posible.",
     tag: "Auditoría · Estrategia · Roadmap",
-    span: "col-span-12 md:col-span-4",
   },
 ];
 
 const steps = [
-  {
-    num: "01",
-    title: "Auditoría",
-    desc: "Entendemos el negocio, los sistemas existentes y dónde hay fricción. Sin supuestos.",
-  },
-  {
-    num: "02",
-    title: "Diseño de solución",
-    desc: "Definimos la arquitectura técnica y el scope exacto. Lo que se entrega, cuándo y cómo.",
-  },
-  {
-    num: "03",
-    title: "Implementación",
-    desc: "Desarrollo iterativo con entregas semanales. El cliente ve el progreso en todo momento.",
-  },
-  {
-    num: "04",
-    title: "Deploy & soporte",
-    desc: "Lanzamos a producción y acompañamos el primer período para asegurar estabilidad.",
-  },
+  { num: "01", title: "Auditoría", desc: "Entendemos el negocio, los sistemas existentes y dónde hay fricción. Sin supuestos." },
+  { num: "02", title: "Diseño", desc: "Definimos la arquitectura técnica y el scope exacto. Lo que se entrega, cuándo y cómo." },
+  { num: "03", title: "Implementación", desc: "Desarrollo iterativo con entregas semanales. El cliente ve el progreso en todo momento." },
+  { num: "04", title: "Deploy & soporte", desc: "Lanzamos a producción y acompañamos el primer período para asegurar estabilidad." },
 ];
 
-export default function HomePage() {
-  return (
-    <div className="bg-black min-h-screen">
+// Light / corporate palette
+const NAVY   = "#0c1a30";   // headings, primary text
+const BLUE   = "#1e3a6e";   // brand accent
+const BLUE_M = "#2a5cb8";   // mid blue for CTAs
+const BLUE_L = "#4a7fd4";   // light blue highlights
+const MUTED  = "#64748b";   // secondary text
+const BORDER = "#dde3ec";   // subtle borders
+const BG     = "#ffffff";   // page bg
+const BG_S   = "#f5f8fc";   // subtle section bg
+const BG_DARK = "#0c1a30";  // dark contrast block
 
-      {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[#1a1a1a] bg-black/80 backdrop-blur-md">
-        <div className="max-w-5xl mx-auto px-8 h-14 flex items-center justify-between">
+export default function HomePage() {
+  const [formState, setFormState] = useState<"idle" | "loading" | "sent" | "error">("idle");
+
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormState("loading");
+    const form = e.currentTarget;
+    const nombre = (form.elements.namedItem("nombre") as HTMLInputElement).value;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const mensaje = (form.elements.namedItem("mensaje") as HTMLTextAreaElement).value;
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre, email, mensaje }),
+    });
+
+    setFormState(res.ok ? "sent" : "error");
+  };
+
+  return (
+    <div className="min-h-screen overflow-x-hidden" style={{ background: BG, fontFamily: "var(--font-body)", color: NAVY }}>
+
+      {/* ─── NAV ──────────────────────────────────────────── */}
+      <nav
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+        style={{ background: "rgba(255,255,255,0.92)", borderBottom: `1px solid ${BORDER}` }}
+      >
+        <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={LOGO_URL} alt="Vector" className="w-7 h-7 object-contain brightness-0 invert" />
-            <span className="text-sm font-semibold tracking-tight">Vector</span>
+            <div
+              className="flex items-center justify-center rounded overflow-hidden"
+              style={{ width: 160, height: 44 }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={LOGO_URL} alt="Vector" className="w-full h-full object-contain" />
+            </div>
           </Link>
-          <ul className="hidden md:flex items-center gap-8 list-none">
-            <li><Link href="#servicios" className="text-xs text-[#666] hover:text-white transition-colors">Servicios</Link></li>
-            <li><Link href="#proceso" className="text-xs text-[#666] hover:text-white transition-colors">Proceso</Link></li>
-            <li>
-              <Link href="#contacto" className="text-xs font-medium bg-white text-black px-4 py-2 rounded-[4px] hover:opacity-85 transition-opacity">
-                Contacto
+
+          <div className="hidden md:flex items-center gap-8">
+            {[
+              { href: "#servicios", label: "Servicios" },
+              { href: "#proceso", label: "Proceso" },
+            ].map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="text-[12px] font-medium tracking-wide transition-colors duration-200"
+                style={{ color: MUTED }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = NAVY)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
+              >
+                {l.label}
               </Link>
-            </li>
-          </ul>
+            ))}
+            <a
+              href="#contacto"
+              className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-5 py-2 rounded-[3px] text-white transition-all duration-200"
+              style={{ background: BLUE }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = BLUE_M)}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = BLUE)}
+            >
+              Contacto
+            </a>
+          </div>
+
+          <Sheet>
+            <SheetTrigger className="md:hidden" style={{ color: NAVY }}>
+              <Menu className="w-5 h-5" />
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64 bg-white" style={{ borderColor: BORDER }}>
+              <div className="flex flex-col gap-6 mt-8">
+                {[
+                  { href: "#servicios", label: "Servicios" },
+                  { href: "#proceso", label: "Proceso" },
+                ].map((l) => (
+                  <Link key={l.href} href={l.href} className="text-sm font-medium" style={{ color: MUTED }}>
+                    {l.label}
+                  </Link>
+                ))}
+                <Separator style={{ background: BORDER }} />
+                <a
+                  href="#contacto"
+                  className="text-sm font-semibold text-white text-center py-2.5 rounded-[3px]"
+                  style={{ background: BLUE }}
+                >
+                  Contacto
+                </a>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="max-w-5xl mx-auto px-8 border-x border-[#1a1a1a] min-h-screen flex flex-col justify-center pt-28 pb-20">
-        <motion.p
-          className="font-mono text-[11px] text-[#444] uppercase tracking-widest mb-10"
-          initial="hidden" animate="visible" variants={fadeUp}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          // vector-ia.com.ar
-        </motion.p>
+      {/* ─── HERO ─────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex flex-col justify-center pt-14 overflow-hidden">
+        {/* Very subtle geometric accent */}
+        <div
+          className="absolute top-0 right-0 w-[55%] h-full pointer-events-none"
+          style={{
+            background: `linear-gradient(135deg, ${BG_S} 0%, #eaf1fc 100%)`,
+            clipPath: "polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          }}
+        />
+        {/* Dot grid on right side */}
+        <div
+          className="absolute top-0 right-0 w-[55%] h-full pointer-events-none opacity-30"
+          style={{
+            backgroundImage: `radial-gradient(${BLUE_L}35 1px, transparent 1px)`,
+            backgroundSize: "28px 28px",
+            clipPath: "polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          }}
+        />
 
-        <motion.h1
-          className="text-[clamp(48px,8vw,100px)] font-black leading-none tracking-[-0.04em] mb-8"
-          initial="hidden" animate="visible" variants={stagger}
-        >
-          <motion.span variants={fadeUp} transition={{ duration: 0.5 }} className="block">
-            Construimos
-          </motion.span>
-          <motion.span variants={fadeUp} transition={{ duration: 0.5 }} className="block">
-            software
-          </motion.span>
-          <motion.span variants={fadeUp} transition={{ duration: 0.5 }} className="block text-[#333]">
-            con inteligencia
-          </motion.span>
-          <motion.span variants={fadeUp} transition={{ duration: 0.5 }} className="block">
-            real.
-          </motion.span>
-        </motion.h1>
+        <div className="max-w-6xl mx-auto px-8 py-32 relative w-full">
+          <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-3xl">
+            {/* Label */}
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2.5 mb-10">
+              <span className="w-5 h-px" style={{ background: BLUE_L }} />
+              <span
+                className="text-[10px] tracking-[0.22em] uppercase font-medium"
+                style={{ color: BLUE_L, fontFamily: "var(--font-mono)" }}
+              >
+                Desarrollo Web & IA · Buenos Aires
+              </span>
+            </motion.div>
 
-        <motion.p
-          className="text-base text-[#666] max-w-md leading-relaxed mb-12"
-          initial="hidden" animate="visible" variants={fadeUp}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          Desarrollo web de producto e integraciones de IA para empresas que quieren resultados, no promesas.
-        </motion.p>
+            {/* Headline */}
+            <motion.h1 variants={stagger} className="mb-8">
+              <motion.span
+                variants={fadeUp}
+                className="block"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(56px,8.5vw,124px)",
+                  fontWeight: 700,
+                  lineHeight: 0.9,
+                  letterSpacing: "-0.025em",
+                  color: NAVY,
+                }}
+              >
+                Construimos
+              </motion.span>
+              <motion.span
+                variants={fadeUp}
+                className="block"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(56px,8.5vw,124px)",
+                  fontWeight: 400,
+                  lineHeight: 0.9,
+                  letterSpacing: "-0.02em",
+                  color: `${BLUE}35`,
+                }}
+              >
+                software
+              </motion.span>
+              <motion.span
+                variants={fadeUp}
+                className="block"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(56px,8.5vw,124px)",
+                  fontWeight: 700,
+                  lineHeight: 0.9,
+                  letterSpacing: "-0.025em",
+                  color: BLUE,
+                }}
+              >
+                inteligente.
+              </motion.span>
+            </motion.h1>
 
-        <motion.div
-          className="flex items-center gap-4"
-          initial="hidden" animate="visible" variants={fadeUp}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <Link
-            href="#contacto"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black text-sm font-semibold rounded-[4px] hover:opacity-85 transition-opacity"
-          >
-            Hablemos →
-          </Link>
-          <Link
-            href="#servicios"
-            className="inline-flex items-center gap-2 px-6 py-3 border border-[#333] text-[#666] text-sm font-medium rounded-[4px] hover:text-white hover:border-[#555] transition-colors"
-          >
-            Ver servicios
-          </Link>
-        </motion.div>
+            <motion.p
+              variants={fadeUp}
+              className="text-[16px] leading-[1.75] max-w-sm mb-12"
+              style={{ color: MUTED }}
+            >
+              Desarrollo web de producto e integraciones de IA para empresas que
+              quieren resultados reales, no promesas.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="flex items-center gap-5">
+              <a
+                href="#contacto"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-[3px] transition-all duration-200"
+                style={{ background: BLUE }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = BLUE_M)}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = BLUE)}
+              >
+                Hablemos
+                <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+              <Link
+                href="#servicios"
+                className="inline-flex items-center gap-2 text-sm font-medium transition-colors duration-200"
+                style={{ color: MUTED }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = NAVY)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
+              >
+                Ver servicios <MoveRight className="w-3.5 h-3.5" />
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
 
-      {/* SERVICIOS */}
-      <section id="servicios" className="border-t border-[#1a1a1a]">
-        <div className="max-w-5xl mx-auto px-8 py-24 border-x border-[#1a1a1a]">
-          <motion.p
-            className="font-mono text-[11px] text-[#444] uppercase tracking-widest mb-12 flex items-center gap-3"
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-          >
-            Servicios
-            <span className="flex-1 h-px bg-[#1a1a1a]" />
-          </motion.p>
+      {/* ─── STATS BAR ────────────────────────────────────── */}
+      <div style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, background: BG_S }}>
+        <div className="max-w-6xl mx-auto px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+          {[
+            { val: "100%", label: "Proyectos entregados" },
+            { val: "< 24h", label: "Tiempo de respuesta" },
+            { val: "5+", label: "Servicios especializados" },
+            { val: "2026", label: "Activos en producción" },
+          ].map(({ val, label }) => (
+            <div key={label} className="flex flex-col gap-1">
+              <span
+                className="text-3xl font-bold"
+                style={{ fontFamily: "var(--font-display)", color: NAVY, fontWeight: 700 }}
+              >
+                {val}
+              </span>
+              <span className="text-[12px] font-medium" style={{ color: MUTED }}>
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
 
+      {/* ─── SERVICIOS ────────────────────────────────────── */}
+      <section id="servicios" className="py-28" style={{ background: BG }}>
+        <div className="max-w-6xl mx-auto px-8">
+          {/* Header */}
           <motion.div
-            className="grid grid-cols-12 gap-px bg-[#1a1a1a] border border-[#1a1a1a] rounded-[4px] overflow-hidden"
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
+            className="flex items-center justify-between mb-14"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
           >
-            {services.map(({ num, icon: Icon, title, desc, tag, span }) => (
+            <div className="flex items-center gap-4">
+              <span className="w-5 h-px" style={{ background: BLUE_L }} />
+              <span
+                className="text-[10px] tracking-[0.22em] uppercase font-medium"
+                style={{ color: BLUE_L, fontFamily: "var(--font-mono)" }}
+              >
+                Servicios
+              </span>
+            </div>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(26px,3vw,40px)",
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+                color: NAVY,
+              }}
+            >
+              Lo que construimos
+            </h2>
+          </motion.div>
+
+          {/* Service rows */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+          >
+            {services.map(({ num, icon: Icon, title, desc, tag }) => (
               <motion.div
                 key={num}
                 variants={fadeUp}
-                className={`${span} bg-black p-10 hover:bg-[#050505] transition-colors`}
+                className="group relative grid grid-cols-12 items-start gap-6 py-8 cursor-default transition-colors duration-200"
+                style={{ borderBottom: `1px solid ${BORDER}` }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = BG_S)}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
               >
-                <p className="font-mono text-[11px] text-[#333] mb-8">{num}</p>
-                <Icon className="w-8 h-8 text-[#444] mb-5" strokeWidth={1.5} />
-                <h3 className="text-lg font-bold tracking-tight mb-3">{title}</h3>
-                <p className="text-sm text-[#666] leading-relaxed max-w-sm">{desc}</p>
-                <span className="inline-block mt-6 font-mono text-[10px] text-[#333] border border-[#1a1a1a] px-2.5 py-1 rounded-[2px]">
-                  {tag}
-                </span>
+                {/* Left accent bar on hover */}
+                <div
+                  className="absolute left-0 top-0 bottom-0 w-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"
+                  style={{ background: BLUE }}
+                />
+
+                {/* Number */}
+                <div className="col-span-1 hidden md:flex items-start pt-1">
+                  <span
+                    className="text-[10px] font-medium"
+                    style={{ color: `${BLUE_L}60`, fontFamily: "var(--font-mono)" }}
+                  >
+                    {num}
+                  </span>
+                </div>
+
+                {/* Icon */}
+                <div className="col-span-1 hidden md:flex items-start pt-0.5">
+                  <div
+                    className="w-8 h-8 rounded-[3px] flex items-center justify-center transition-colors duration-300"
+                    style={{ background: `${BLUE}0d`, border: `1px solid ${BORDER}` }}
+                  >
+                    <Icon
+                      className="w-3.5 h-3.5 transition-colors duration-300"
+                      style={{ color: BLUE }}
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                </div>
+
+                {/* Title */}
+                <div className="col-span-12 md:col-span-3">
+                  <h3
+                    className="text-[15px] font-semibold leading-snug group-hover:text-[#1e3a6e] transition-colors duration-200"
+                    style={{ color: NAVY }}
+                  >
+                    {title}
+                  </h3>
+                </div>
+
+                {/* Description */}
+                <div className="col-span-12 md:col-span-5">
+                  <p className="text-[13px] leading-relaxed" style={{ color: MUTED }}>
+                    {desc}
+                  </p>
+                </div>
+
+                {/* Tag + arrow */}
+                <div className="col-span-12 md:col-span-2 flex items-start justify-between md:justify-end gap-3">
+                  <span
+                    className="text-[9px] tracking-wide uppercase font-medium px-2 py-1 rounded-[2px]"
+                    style={{
+                      color: BLUE,
+                      background: `${BLUE}0d`,
+                      border: `1px solid ${BLUE}25`,
+                      fontFamily: "var(--font-mono)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {tag.split(" · ")[0]}
+                  </span>
+                  <ArrowUpRight
+                    className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0 shrink-0 mt-1"
+                    style={{ color: BLUE }}
+                  />
+                </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* PROCESO */}
-      <section id="proceso" className="border-t border-[#1a1a1a]">
-        <div className="max-w-5xl mx-auto px-8 py-24 border-x border-[#1a1a1a]">
-          <motion.p
-            className="font-mono text-[11px] text-[#444] uppercase tracking-widest mb-12 flex items-center gap-3"
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+      {/* ─── PROCESO ──────────────────────────────────────── */}
+      <section id="proceso" className="py-28" style={{ background: BG_S, borderTop: `1px solid ${BORDER}` }}>
+        <div className="max-w-6xl mx-auto px-8">
+          <motion.div
+            className="flex items-center gap-4 mb-14"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
           >
-            The Blueprint
-            <span className="flex-1 h-px bg-[#1a1a1a]" />
-          </motion.p>
+            <span className="w-5 h-px" style={{ background: BLUE_L }} />
+            <span
+              className="text-[10px] tracking-[0.22em] uppercase font-medium"
+              style={{ color: BLUE_L, fontFamily: "var(--font-mono)" }}
+            >
+              Proceso
+            </span>
+            <h2
+              className="ml-4"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(26px,3vw,40px)",
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+                color: NAVY,
+              }}
+            >
+              The Blueprint
+            </h2>
+          </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#1a1a1a] border border-[#1a1a1a] rounded-[4px] overflow-hidden"
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
+            className="grid grid-cols-1 md:grid-cols-4 gap-px"
+            style={{ background: BORDER }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
           >
-            {steps.map(({ num, title, desc }) => (
+            {steps.map(({ num, title, desc }, i) => (
               <motion.div
                 key={num}
                 variants={fadeUp}
-                className="bg-black p-12 hover:bg-[#050505] transition-colors group cursor-default"
+                className="group p-8 transition-all duration-200 cursor-default relative"
+                style={{ background: BG_S }}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLElement).style.background = "#fff")
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLElement).style.background = BG_S)
+                }
               >
-                <p className="font-mono text-[48px] font-semibold text-[#1f1f1f] group-hover:text-[#333] transition-colors leading-none tracking-[-0.04em] mb-6">
+                {/* Top connector */}
+                <div className="flex items-center justify-between mb-8">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[11px] font-semibold"
+                    style={{ background: BLUE, fontFamily: "var(--font-mono)" }}
+                  >
+                    {i + 1}
+                  </div>
+                  {i < steps.length - 1 && (
+                    <MoveRight className="w-3.5 h-3.5 opacity-20" style={{ color: NAVY }} />
+                  )}
+                </div>
+                {/* Large number watermark */}
+                <div
+                  className="absolute bottom-3 right-5 font-bold leading-none pointer-events-none select-none"
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: 72,
+                    color: `${BLUE}07`,
+                    letterSpacing: "-0.04em",
+                    lineHeight: 1,
+                  }}
+                >
                   {num}
+                </div>
+                <h3
+                  className="text-[13px] font-semibold mb-2.5 transition-colors duration-200 group-hover:text-[#1e3a6e]"
+                  style={{ color: NAVY, fontFamily: "var(--font-mono)" }}
+                >
+                  {title}
+                </h3>
+                <p className="text-[13px] leading-relaxed relative" style={{ color: MUTED }}>
+                  {desc}
                 </p>
-                <h3 className="text-lg font-bold tracking-tight mb-2">{title}</h3>
-                <p className="text-sm text-[#666] leading-relaxed">{desc}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section id="contacto" className="border-t border-[#1a1a1a]">
+      {/* ─── CTA ──────────────────────────────────────────── */}
+      <section
+        id="contacto"
+        className="py-32 relative overflow-hidden"
+        style={{ background: BG_DARK }}
+      >
+        {/* Dot grid bg */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.06]"
+          style={{
+            backgroundImage: `radial-gradient(${BLUE_L} 1px, transparent 1px)`,
+            backgroundSize: "32px 32px",
+          }}
+        />
+        {/* Glow */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse, ${BLUE}50 0%, transparent 70%)`,
+            filter: "blur(60px)",
+          }}
+        />
+
         <motion.div
-          className="max-w-5xl mx-auto px-8 py-24 border-x border-[#1a1a1a] flex flex-col items-center text-center gap-8"
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
+          className="max-w-6xl mx-auto px-8 relative"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={stagger}
         >
+          <motion.div variants={fadeUp} className="flex items-center gap-3 mb-10">
+            <span className="w-5 h-px" style={{ background: BLUE_L }} />
+            <span
+              className="text-[10px] tracking-[0.22em] uppercase font-medium"
+              style={{ color: `${BLUE_L}80`, fontFamily: "var(--font-mono)" }}
+            >
+              Contacto
+            </span>
+          </motion.div>
+
           <motion.h2
             variants={fadeUp}
-            className="text-[clamp(36px,5vw,64px)] font-black tracking-[-0.04em] leading-none max-w-2xl"
+            className="mb-5 text-white"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(44px,7vw,100px)",
+              fontWeight: 700,
+              lineHeight: 0.92,
+              letterSpacing: "-0.025em",
+            }}
           >
-            ¿Tenés un proyecto en mente?
+            ¿Tenés un proyecto
+            <br />
+            <span style={{ fontWeight: 500, color: BLUE_L }}>
+              en mente?
+            </span>
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-base text-[#666] max-w-sm leading-relaxed">
+
+          <motion.p
+            variants={fadeUp}
+            className="text-[15px] leading-relaxed mb-12 max-w-xs"
+            style={{ color: "#93b5e870" }}
+          >
             Contanos qué necesitás y te respondemos en menos de 24 horas.
           </motion.p>
-          <motion.a
-            variants={fadeUp}
-            href="mailto:team@vector-ia.com.ar"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black text-sm font-semibold rounded-[4px] hover:opacity-85 transition-opacity"
-          >
-            team@vector-ia.com.ar →
-          </motion.a>
+
+          {formState === "sent" ? (
+            <motion.div variants={fadeUp} className="flex items-center gap-3 py-6">
+              <CheckCircle className="w-5 h-5" style={{ color: BLUE_L }} />
+              <p className="text-[15px] font-medium text-white">
+                Mensaje enviado. Te respondemos en menos de 24hs.
+              </p>
+            </motion.div>
+          ) : (
+            <motion.form
+              variants={fadeUp}
+              className="flex flex-col gap-3 w-full max-w-md"
+              onSubmit={handleContactSubmit}
+            >
+              <div className="grid grid-cols-2 gap-3">
+                <input
+                  name="nombre"
+                  required
+                  placeholder="Tu nombre"
+                  className="col-span-1 px-4 py-3 text-[13px] rounded-[3px] outline-none transition-all duration-200"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: `1px solid rgba(255,255,255,0.12)`,
+                    color: "#fff",
+                    fontFamily: "var(--font-body)",
+                  }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = `${BLUE_L}80`)}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
+                />
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Tu email"
+                  className="col-span-1 px-4 py-3 text-[13px] rounded-[3px] outline-none transition-all duration-200"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: `1px solid rgba(255,255,255,0.12)`,
+                    color: "#fff",
+                    fontFamily: "var(--font-body)",
+                  }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = `${BLUE_L}80`)}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
+                />
+              </div>
+              <textarea
+                name="mensaje"
+                required
+                placeholder="Contanos sobre tu proyecto..."
+                rows={4}
+                className="px-4 py-3 text-[13px] rounded-[3px] outline-none transition-all duration-200 resize-none"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: `1px solid rgba(255,255,255,0.12)`,
+                  color: "#fff",
+                  fontFamily: "var(--font-body)",
+                }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = `${BLUE_L}80`)}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
+              />
+              {formState === "error" && (
+                <p className="text-[12px]" style={{ color: "#f87171" }}>
+                  Hubo un error al enviar. Intentá de nuevo o escribinos a team@vector-ia.com.ar
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={formState === "loading"}
+                className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 text-[13px] font-semibold text-white rounded-[3px] transition-all duration-200 self-start disabled:opacity-60 disabled:cursor-not-allowed"
+                style={{ background: BLUE, border: `1px solid ${BLUE_L}40` }}
+                onMouseEnter={(e) => { if (formState !== "loading") (e.currentTarget as HTMLElement).style.background = BLUE_M; }}
+                onMouseLeave={(e) => { if (formState !== "loading") (e.currentTarget as HTMLElement).style.background = BLUE; }}
+              >
+                {formState === "loading" ? "Enviando..." : "Enviar mensaje"}
+                {formState !== "loading" && (
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                )}
+              </button>
+            </motion.form>
+          )}
         </motion.div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-[#1a1a1a]">
-        <div className="max-w-5xl mx-auto px-8 py-8 border-x border-[#1a1a1a] flex items-center justify-between">
+      {/* ─── FOOTER ───────────────────────────────────────── */}
+      <footer style={{ borderTop: `1px solid ${BORDER}`, background: BG_S }}>
+        <div className="max-w-6xl mx-auto px-8 py-8 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={LOGO_URL} alt="Vector" className="w-5 h-5 object-contain brightness-0 invert opacity-40" />
-            <span className="text-sm font-semibold text-[#444]">Vector</span>
+            <div
+              className="flex items-center justify-center rounded overflow-hidden opacity-70"
+              style={{ width: 120, height: 36 }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={LOGO_URL} alt="Vector" className="w-full h-full object-contain" />
+            </div>
           </Link>
-          <div className="flex items-center gap-6">
-            <a href="mailto:team@vector-ia.com.ar" className="text-xs text-[#333] hover:text-[#666] transition-colors">
+          <div className="flex items-center gap-5">
+            <a
+              href="mailto:team@vector-ia.com.ar"
+              className="text-[11px] transition-colors duration-200"
+              style={{ color: MUTED, fontFamily: "var(--font-mono)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = NAVY)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
+            >
               team@vector-ia.com.ar
             </a>
-            <span className="font-mono text-[11px] text-[#222]">© 2026</span>
+            <Separator orientation="vertical" className="h-3" style={{ background: BORDER }} />
+            <span
+              className="text-[10px]"
+              style={{ color: "#94a3b8", fontFamily: "var(--font-mono)" }}
+            >
+              © 2026
+            </span>
           </div>
         </div>
       </footer>
-
     </div>
   );
 }
