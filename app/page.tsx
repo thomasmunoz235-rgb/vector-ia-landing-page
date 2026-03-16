@@ -103,14 +103,14 @@ export default function HomePage() {
         className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
         style={{ background: "rgba(255,255,255,0.92)", borderBottom: `1px solid ${BORDER}` }}
       >
-        <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div
               className="flex items-center justify-center rounded overflow-hidden"
               style={{ width: 160, height: 44 }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" className="w-full h-full object-contain" />
+              <img src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" className="w-full h-full object-contain object-left" />
             </div>
           </Link>
 
@@ -176,7 +176,7 @@ export default function HomePage() {
           className="absolute top-0 right-0 w-[55%] h-full pointer-events-none"
           style={{
             background: `linear-gradient(135deg, ${BG_S} 0%, #eaf1fc 100%)`,
-            clipPath: "polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%)",
           }}
         />
         {/* Dot grid on right side */}
@@ -185,11 +185,11 @@ export default function HomePage() {
           style={{
             backgroundImage: `radial-gradient(${BLUE_L}35 1px, transparent 1px)`,
             backgroundSize: "28px 28px",
-            clipPath: "polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%)",
           }}
         />
 
-        <div className="max-w-6xl mx-auto px-8 py-32 relative w-full">
+        <div className="max-w-6xl mx-auto px-5 md:px-8 py-20 md:py-32 relative w-full">
           <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-3xl">
             {/* Label */}
             <motion.div variants={fadeUp} className="inline-flex items-center gap-2.5 mb-10">
@@ -257,7 +257,7 @@ export default function HomePage() {
               quieren resultados reales, no promesas.
             </motion.p>
 
-            <motion.div variants={fadeUp} className="flex items-center gap-5">
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <a
                 href="#contacto"
                 className="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-[3px] transition-all duration-200"
@@ -284,7 +284,7 @@ export default function HomePage() {
 
       {/* ─── STATS BAR ────────────────────────────────────── */}
       <div style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, background: BG_S }}>
-        <div className="max-w-6xl mx-auto px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="max-w-6xl mx-auto px-5 md:px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {[
             { val: "100%", label: "Proyectos entregados" },
             { val: "< 24h", label: "Tiempo de respuesta" },
@@ -308,10 +308,10 @@ export default function HomePage() {
 
       {/* ─── SERVICIOS ────────────────────────────────────── */}
       <section id="servicios" className="py-28" style={{ background: BG }}>
-        <div className="max-w-6xl mx-auto px-8">
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
           {/* Header */}
           <motion.div
-            className="flex items-center justify-between mb-14"
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-14"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -411,12 +411,13 @@ export default function HomePage() {
                       background: `${BLUE}0d`,
                       border: `1px solid ${BLUE}25`,
                       fontFamily: "var(--font-mono)",
-                      whiteSpace: "nowrap",
+                      whiteSpace: "normal",
                     }}
                   >
                     {tag.split(" · ")[0]}
                   </span>
                   <ArrowUpRight
+
                     className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0 shrink-0 mt-1"
                     style={{ color: BLUE }}
                   />
@@ -429,7 +430,7 @@ export default function HomePage() {
 
       {/* ─── PROCESO ──────────────────────────────────────── */}
       <section id="proceso" className="py-28" style={{ background: BG_S, borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-6xl mx-auto px-8">
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
           <motion.div
             className="flex items-center gap-4 mb-14"
             initial="hidden"
@@ -543,7 +544,7 @@ export default function HomePage() {
         />
 
         <motion.div
-          className="max-w-6xl mx-auto px-8 relative"
+          className="max-w-6xl mx-auto px-5 md:px-8 relative"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -619,7 +620,7 @@ export default function HomePage() {
               className="flex flex-col gap-3 w-full max-w-md"
               onSubmit={handleContactSubmit}
             >
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input
                   name="nombre"
                   required
@@ -690,7 +691,7 @@ export default function HomePage() {
 
       {/* ─── FOOTER ───────────────────────────────────────── */}
       <footer style={{ borderTop: `1px solid ${BORDER}`, background: BG_S }}>
-        <div className="max-w-6xl mx-auto px-8 py-8 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-5 md:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
           <Link href="/" className="flex items-center gap-2.5">
             <div
               className="flex items-center justify-center rounded overflow-hidden opacity-70"
