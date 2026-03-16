@@ -105,13 +105,8 @@ export default function HomePage() {
         style={{ background: "rgba(255,255,255,0.92)", borderBottom: `1px solid ${BORDER}` }}
       >
         <div className="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div
-              className="flex items-center justify-center rounded overflow-hidden"
-              style={{ width: 160, height: 44 }}
-            >
-              <Image src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" width={160} height={44} className="object-contain object-left" priority />
-            </div>
+          <Link href="/" className="flex items-center">
+            <Image src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" width={120} height={34} className="h-8 w-auto" priority />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
@@ -692,13 +687,8 @@ export default function HomePage() {
       {/* ─── FOOTER ───────────────────────────────────────── */}
       <footer style={{ borderTop: `1px solid ${BORDER}`, background: BG_S }}>
         <div className="max-w-6xl mx-auto px-5 md:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div
-              className="flex items-center justify-center rounded overflow-hidden opacity-70"
-              style={{ width: 120, height: 36 }}
-            >
-              <Image src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" width={120} height={36} className="object-contain" />
-            </div>
+          <Link href="/" className="flex items-center opacity-70">
+            <Image src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" width={100} height={28} className="h-7 w-auto" />
           </Link>
           <div className="flex items-center gap-5">
             <a
