@@ -4,6 +4,7 @@ import { motion, type Variants } from "framer-motion";
 import { useState } from "react";
 import { Globe, Layers, Database, Zap, Users, Menu, ArrowUpRight, MoveRight, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 
@@ -109,8 +110,7 @@ export default function HomePage() {
               className="flex items-center justify-center rounded overflow-hidden"
               style={{ width: 160, height: 44 }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" className="w-full h-full object-contain object-left" />
+              <Image src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" width={160} height={44} className="object-contain object-left" priority />
             </div>
           </Link>
 
@@ -697,8 +697,7 @@ export default function HomePage() {
               className="flex items-center justify-center rounded overflow-hidden opacity-70"
               style={{ width: 120, height: 36 }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" className="w-full h-full object-contain" />
+              <Image src={LOGO_URL} alt="Vector IA — Desarrollo Web e Inteligencia Artificial" width={120} height={36} className="object-contain" />
             </div>
           </Link>
           <div className="flex items-center gap-5">

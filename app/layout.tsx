@@ -21,15 +21,34 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Vector — Desarrollo Web & Inteligencia Artificial",
-  description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+  title: "Vector IA — Desarrollo Web & Inteligencia Artificial | Buenos Aires",
+  description:
+    "Agencia de desarrollo web e inteligencia artificial en Buenos Aires. Construimos aplicaciones con Next.js, React y TypeScript. Integramos IA, chatbots y automatizaciones para empresas que quieren resultados reales.",
+  keywords: [
+    "desarrollo web Buenos Aires",
+    "agencia IA Argentina",
+    "inteligencia artificial empresas",
+    "Next.js React TypeScript",
+    "chatbots IA",
+    "automatización procesos",
+    "RAG conocimiento",
+    "consultoría inteligencia artificial",
+    "desarrollo software Argentina",
+    "agentes IA",
+    "integración OpenAI",
+    "aplicaciones web modernas",
+  ],
+  authors: [{ name: "Vector IA", url: "https://vector-ia.com.ar" }],
+  creator: "Vector IA",
+  publisher: "Vector IA",
   metadataBase: new URL("https://vector-ia.com.ar"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Vector — Desarrollo Web & Inteligencia Artificial",
-    description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+    title: "Vector IA — Desarrollo Web & Inteligencia Artificial",
+    description:
+      "Agencia de desarrollo web e IA en Buenos Aires. Aplicaciones con Next.js, React y TypeScript. Chatbots, automatizaciones y sistemas RAG para empresas.",
     url: "https://vector-ia.com.ar",
     siteName: "Vector IA",
     locale: "es_AR",
@@ -37,8 +56,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vector — Desarrollo Web & Inteligencia Artificial",
-    description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+    title: "Vector IA — Desarrollo Web & Inteligencia Artificial",
+    description:
+      "Agencia de desarrollo web e IA en Buenos Aires. Aplicaciones con Next.js, React y TypeScript. Chatbots, automatizaciones y sistemas RAG para empresas.",
   },
 };
 
@@ -48,21 +68,48 @@ const jsonLd = {
   name: "Vector IA",
   url: "https://vector-ia.com.ar",
   logo: "https://vector-ia.com.ar/images/Vector-Ia-trasparente.png",
-  description: "Desarrollo web e integraciones de IA para empresas que quieren resultados reales.",
+  image: "https://vector-ia.com.ar/opengraph-image",
+  description:
+    "Agencia de desarrollo web e inteligencia artificial en Buenos Aires. Construimos aplicaciones con Next.js, React y TypeScript, e integramos IA, chatbots y automatizaciones para empresas.",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Buenos Aires",
+    addressRegion: "Buenos Aires",
     addressCountry: "AR",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: -34.6037,
+    longitude: -58.3816,
+  },
   email: "team@vector-ia.com.ar",
-  areaServed: "AR",
-  serviceType: [
-    "Desarrollo Web",
-    "Integraciones de Inteligencia Artificial",
-    "Automatización de Procesos",
-    "Consultoría IA",
-    "Sistemas RAG",
+  areaServed: [
+    { "@type": "Country", name: "Argentina" },
   ],
+  priceRange: "$$",
+  knowsAbout: [
+    "Desarrollo Web",
+    "Inteligencia Artificial",
+    "Next.js",
+    "React",
+    "TypeScript",
+    "ChatGPT",
+    "OpenAI",
+    "Automatización",
+    "RAG",
+    "LLM",
+  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Servicios de desarrollo web e IA",
+    itemListElement: [
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Desarrollo Web", description: "Aplicaciones modernas con Next.js, React y TypeScript" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Integraciones IA", description: "Chatbots, asistentes y automatizaciones con IA" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "RAG & Conocimiento", description: "Sistemas que permiten a modelos consultar documentos internos" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Automatización", description: "Flujos automatizados conectando herramientas, APIs y modelos IA" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Consultoría IA", description: "Auditoría y estrategia para integrar IA en tu negocio" } },
+    ],
+  },
   sameAs: [],
 };
 
