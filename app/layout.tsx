@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "Vector IA — Desarrollo Web & Inteligencia Artificial",
     description:
       "Agencia de desarrollo web e IA en Buenos Aires. Aplicaciones con Next.js, React y TypeScript. Chatbots, automatizaciones y sistemas RAG para empresas.",
-    url: "https://vector-ia.com.ar",
+    url: "https://vector-ia.com.ar/",
     siteName: "Vector IA",
     locale: "es_AR",
     type: "website",
